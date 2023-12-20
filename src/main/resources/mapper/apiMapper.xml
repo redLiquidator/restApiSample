@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sql Mapper -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.provider.api.mapper.ApiMapper">
+
+	<select id="test" resultType="com.provider.api.model.ApiVO">
+ 		SELECT nm FROM members where id= '1847c78c'
+ 	</select> 	
+ 	<select id="test1" resultType="String">
+ 		SELECT 7788 empno FROM dual
+ 	</select> 
+ 	
+	
+	<select id="getUserinfoById" parameterType="com.provider.api.model.ApiVO" resultType="com.provider.api.model.ApiVO">
+ 		SELECT 
+ 			members.id,
+ 			members.nm,
+ 			members.brdt,
+ 			members.mbl_no,
+ 			reservation.insp_rsvt_no,
+ 			reservation.insp_addr,
+ 			reservation.insp_dt
+ 		FROM reservation
+		INNER JOIN members
+		ON reservation.insp_rsvt_no = members.insp_rsvt_no
+		WHERE members.id = #{id}
+ 	</select> 	
+ 	
+ 	<update id="updateExamNo" parameterType="com.provider.api.model.ApiVO">
+ 		UPDATE members 
+ 		SET insp_rsvt_no="100001"
+ 		WHERE id="d2c6c82a";
+ 	</update>
+ 	
+ 	<insert id="insertReservation" parameterType="com.provider.api.model.ApiVO">
+ 		INSERT INTO reservation
+ 		VALUES (100001,"경기도 수원시 팔달구 고화로 120","2023-12-30 15:30:00")
+ 	</insert>
+ 	
+ 	<update id="updateReservation" parameterType="com.provider.api.model.ApiVO">
+ 		UPDATE reservation 
+ 		SET insp_addr="변경된주소", insp_dt="2023-12-30 10:30:00"
+ 		WHERE insp_rsvt_no="100001"
+ 	</update>
+ 	
+ 	<delete id="deleteReservation" parameterType="com.provider.api.model.ApiVO">
+ 		DELETE FROM reservation
+ 		WHERE insp_rsvt_no="100001"
+ 	</delete>
+ 	
+</mapper> 	
