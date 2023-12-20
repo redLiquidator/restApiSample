@@ -50,9 +50,9 @@ public class ApiProviderController {
 		public ResponseEntity<?> getUserinfoById(@RequestParam String id) {
 			System.out.println("getUserinfoById | request: get | id "+ id);
 			ApiVO user = apiService.getUserinfoById(id);
+			
 			//System.out.println("user | " + user.toString());
 			//System.out.println("user | " + user.getInsp_addr()+user.getInsp_rsvt_no()+user.getInsp_dt());
-			
 	
 			return new ResponseEntity(user, HttpStatus.OK);
 			

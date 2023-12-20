@@ -5,11 +5,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.provider.api.mapper.ApiMapper">
 
-	<select id="test" resultType="com.provider.api.model.ApiVO">
- 		SELECT nm FROM members where id= '1847c78c'
- 	</select> 	
+	<select id="test3" resultType="com.provider.api.model.ApiVO">
+ 		SELECT mbl_no FROM members where id= 'a2c9393b'
+ 	</select> 
  	<select id="test1" resultType="String">
+ 		SELECT mbl_no FROM members where id= 'a2c9393b'
+ 	</select>	
+ 	<select id="test2" resultType="String">
  		SELECT 7788 empno FROM dual
+ 	</select> 
+ 	<select id="test" resultType="com.provider.api.model.ApiVO">
+ 		SELECT insp_rsvt_no FROM reservation where insp_rsvt_no= '100001'
  	</select> 
  	
 	

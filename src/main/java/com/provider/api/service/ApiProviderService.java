@@ -16,7 +16,6 @@ public class ApiProviderService {
 	
 
 	public ApiVO test(){
-		System.out.println("service**"+apiMapper.test());
 		return apiMapper.test();		
 	}
 	

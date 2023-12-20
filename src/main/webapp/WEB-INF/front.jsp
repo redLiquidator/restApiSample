@@ -12,15 +12,17 @@
 	 text-align: center;
 	}
 	
-	#search{
-	  height: 30px;
-	  text-align: center;
+	#modify{
+	 margin-left: 38%;
+	}
+	#delete{
+	 margin-left: 2%;
 	}
 	
 	#title{
-      margin-top: 2%;
-      margin-left: 30%;
-      font-weight: bold;
+     margin-top: 2%;
+     margin-left: 30%;
+     font-weight: bold;
 	}
 	
 	#table1 {
@@ -47,9 +49,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-
-
-
 	$(document).ready(function(){
 		let search = document.querySelector("#search");
 		let userid;
@@ -65,6 +64,7 @@
 		$('#msg2').hide();
 		$('#table1').hide();
 		$('#table2').hide();
+		$('#container3').hide();
 		
 	 	let jsonData = {
 				tableno: 2,
@@ -77,7 +77,6 @@
 		//사용자정보 및 예약정보 검색
 		
 		search.addEventListener("click", ()=>{
-
 		
 		userid = $('#userkey').val();
 
@@ -88,12 +87,9 @@
 					// 서버가 필요한 정보를 같이 보냄. 
 					function(data, status) { 
 						console.log(data);
-						console.log(status);
-										
-						userid = data.id;
-
+						console.log(status);		
 						//사용자정보가 있으면 회원정보테이블을 보여준다.
-						if(userid != null){
+						if(data.id != null){
 							console.log("user table show");
 							  //사용자 테이블 값 세팅	
 							  
@@ -101,18 +97,29 @@
 							 $("#birth").text(data.brdt.substring(0, 10));
 							 $("#mobile").text(data.mbl_no);
 							 
-							 $('#msg1').hide();				
+							 $('#msg1').hide();	
+							 $('#msg2').hide();	
 							 $('#table1').show();
 							 
 						}else{
+							 $('#container3').hide();
 							 $('#table1').hide();
+							 $('#msg1').show();	
+							 $('#msg2').hide();	
 						}
 						//예약정보가 있으면 병역판정검사테이블을 보여준다.
-						if(nsp_rsvt_no != null){
+						if(data.insp_rsvt_no != null){
 							console.log("reservation table show");
+							console.log(data.insp_rsvt_no);
+							 $("#address").text(data.insp_addr);
+							 $("#date").text(data.insp_dt.substring(0, 10));
+							 $("#time").text(data.insp_dt.substring(12,5));
+							 
 							 $('#msg2').hide();
 							 $('#table2').show();
+							 $('#container3').show();
 						}else{
+							$('#msg2').show();
 							 $('#table2').hide();
 						}						
 					} ); 
@@ -175,7 +182,7 @@
 	<br>
 	#회원번호를 입력하세요:
 	<input id="userkey" name="userkey" placeholder="5bda87ad" size="4"> 
-	<button id="search"  class="btn btn-info">검색</button> 
+	<button id="search"  class="btn btn-outline-secondary">검색</button> 
 	</div>
 	${user}
 	${data}
@@ -222,32 +229,33 @@
 		  <thead>
 		    <tr>
 		      <th scope="col">#</th>
-		      <th scope="col">First</th>
-		      <th scope="col">Last</th>
-		      <th scope="col">Handle</th>
+		      <th scope="col"></th>
+		      <th scope="col"></th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		    <tr>
-		      <th scope="row">1</th>
-		      <td>Mark</td>
-		      <td>Otto</td>
-		      <td>@mdo</td>
+		      <th>1</th>
+		      <td>검사장소</td>
+		      <td id="address"></td>
 		    </tr>
 		    <tr>
-		      <th scope="row">2</th>
-		      <td>Jacob</td>
-		      <td>Thornton</td>
-		      <td>@fat</td>
+		      <th>2</th>
+		      <td>검사일자</td>
+		      <td id="date"></td>
 		    </tr>
 		    <tr>
-		      <th scope="row">3</th>
-		      <td colspan="2">Larry the Bird</td>
-		      <td>@twitter</td>
+		      <th>3</th>
+		      <td>시간</td>
+		      <td id="time"></td>
 		    </tr>
 		  </tbody>
 		</table>
 		</div>	
+	</div>
+	<div id="container3">
+		<button id="modify"  class="btn btn-outline-warning">예약변경</button> 
+		<button id="delete"  class="btn btn-outline-danger">예약삭제</button> 
 	</div>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
