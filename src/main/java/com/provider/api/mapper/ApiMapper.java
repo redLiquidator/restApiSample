@@ -11,6 +11,7 @@ public interface ApiMapper {
 	
 	//회원 정보및 예약 정보 조회
 	public ApiVO getUserinfoById(String id);	
+	public ApiVO getOnlyUserinfoById(String id);	
 	
 	//검사예약
 	public void updateExamNo(ApiVO ApiVO);

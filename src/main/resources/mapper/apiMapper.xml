@@ -34,15 +34,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE members.id = #{id}
  	</select> 	
  	
+ 	<select id="getOnlyUserinfoById" parameterType="com.provider.api.model.ApiVO" resultType="com.provider.api.model.ApiVO">
+ 		SELECT 
+ 			id,
+ 			nm,
+ 			brdt,
+ 			mbl_no
+ 		FROM members
+		WHERE members.id = #{id}
+ 	</select> 
+ 	
  	<update id="updateExamNo" parameterType="com.provider.api.model.ApiVO">
  		UPDATE members 
- 		SET insp_rsvt_no="100001"
- 		WHERE id="d2c6c82a";
+ 		SET insp_rsvt_no= #{insp_rsvt_no}
+ 		WHERE id= #{id}
  	</update>
  	
  	<insert id="insertReservation" parameterType="com.provider.api.model.ApiVO">
  		INSERT INTO reservation
- 		VALUES (100001,"경기도 수원시 팔달구 고화로 120","2023-12-30 15:30:00")
+ 		VALUES (#{insp_rsvt_no}, #{insp_addr}, #{insp_dt})
  	</insert>
  	
  	<update id="updateReservation" parameterType="com.provider.api.model.ApiVO">

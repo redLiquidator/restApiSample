@@ -12,6 +12,10 @@
 	 text-align: center;
 	}
 	
+	#insert{
+	 margin-top: 2%;
+	}
+	
 	#modify{
 	 margin-left: 38%;
 	}
@@ -25,22 +29,14 @@
      font-weight: bold;
 	}
 	
-	#table1 {
+	#table1,#table2,#table3 {
 	  margin-top: 5%;
 	  margin-left: auto;
  	  margin-right: auto;
 	  text-align: center;
 	  width: 40%;
 	}
-	
-	#table2 {
-	  margin-top: 5%;
-	  margin-left: auto;
- 	  margin-right: auto;
-	  text-align: center;
-	  width: 40%;
-	}
-	
+
 	
 </style>
 <meta charset="EUC-KR">
@@ -51,6 +47,10 @@
 
 	$(document).ready(function(){
 		let search = document.querySelector("#search");
+		let insert = document.querySelector("#insert");	
+		let insertExecute = document.querySelector("#insertExecute");	
+		let modify = document.querySelector("#modify");
+		let del = document.querySelector("#delete");
 		let userid;
 		let nm;
 		let brdt;
@@ -58,41 +58,61 @@
 		let nsp_rsvt_no;
 		let insp_addr;
 		let insp_dt;
+		let datetime;
 		
 		//초기화면세팅
 		$('#msg1').hide();
 		$('#msg2').hide();
+		$('#insert').hide();
 		$('#table1').hide();
 		$('#table2').hide();
 		$('#container3').hide();
+		$('#container4').hide();
 		
 	 	let jsonData = {
-				tableno: 2,
-				itemId : 2,
-				name : 'Kalguksu',
-				price : 8000				
+				"id" : userid,
+				"nm" : nm,
+				"brdt" : brdt,
+				"mbl_no" : mbl_no,
+				"nsp_rsvt_no" : nsp_rsvt_no,
+				"insp_addr" : insp_addr,
+				"insp_dt" : insp_dt		
 		};
  
 	
-		//사용자정보 및 예약정보 검색
-		
+		//기능1.사용자정보 및 예약정보 검색	
 		search.addEventListener("click", ()=>{
 		
+		$('#container4').hide();
+		$('#insert').hide();
 		userid = $('#userkey').val();
-
 		console.log("you clicked search");
+		
 		
 		 $.get("/search", 
 					{ id : userid }, 
 					// 서버가 필요한 정보를 같이 보냄. 
 					function(data, status) { 
 						console.log(data);
-						console.log(status);		
+						console.log(status);
+						
+						userid = data.id;
+						nm = data.nm;
+						brdt = data.brdt;
+						mbl_no = data.mbl_no;
+						nsp_rsvt_no = data.nsp_rsvt_no;
+						insp_addr = data.insp_addr;
+						insp_dt = data.insp_dt;
+						
+						//예약버튼 visible 설정
+						if(data.id != null && data.insp_rsvt_no == null){
+							$('#insert').show();
+						}
+						
 						//사용자정보가 있으면 회원정보테이블을 보여준다.
 						if(data.id != null){
 							console.log("user table show");
-							  //사용자 테이블 값 세팅	
-							  
+							  //사용자 테이블 값 세팅				  
 							 $("#name").text(data.nm);
 							 $("#birth").text(data.brdt.substring(0, 10));
 							 $("#mobile").text(data.mbl_no);
@@ -100,6 +120,7 @@
 							 $('#msg1').hide();	
 							 $('#msg2').hide();	
 							 $('#table1').show();
+							 $('#container3').hide();
 							 
 						}else{
 							 $('#container3').hide();
@@ -113,65 +134,66 @@
 							console.log(data.insp_rsvt_no);
 							 $("#address").text(data.insp_addr);
 							 $("#date").text(data.insp_dt.substring(0, 10));
-							 $("#time").text(data.insp_dt.substring(12,5));
+							 $("#time").text(data.insp_dt.substring(11,19));
 							 
 							 $('#msg2').hide();
 							 $('#table2').show();
 							 $('#container3').show();
 						}else{
 							$('#msg2').show();
-							 $('#table2').hide();
+							$('#table2').hide();
 						}						
-					} ); 
-		});
-		
-		
-		$.ajax({
-			type:"post",
-			url:"reservation",
-	        headers: {"asd": "asdf"}, //adding data to header
-			data: jsonData 
-		}).done(function(data, status, xhr){ // done - success 와 동일
-			console.log("JSON.stringify");
-			console.log(JSON.stringify(data));
-				
-			console.log("<1>data");
-			console.log(data);
-			console.log("<2>status");
-			console.log(status);
-			console.log("<3>xhr");
-			console.log(xhr);
-			console.log("<4>header");
-			let headers = xhr.getAllResponseHeaders();	
-			//headers = headers.substring(1, 4);
-			console.log(headers);
-			console.log("<5>get RequestHeader");
-			console.log(xhr.getRequestHeader);
-			console.log("<6>get ResponseHeader");
-			console.log(xhr.getResponseHeader);
+					}); 
+		 
+			//기능2.예약정보등록
+			insert.addEventListener("click", ()=>{
+				$('#container3').hide();
+				$('#container4').show();
+				$('#msg2').hide();
+				$('#insert').hide();
+			});
 			
-			//const str = String(headers);
-			//console.log(str);
-			//console.log(JSON.parse(str));
-			//console.log(JSON.parse(str));
-			//console.log(headers["content-type"]);
-			//console.log(headers.content-type);	x
-			//console.log(headers.get("content-type"));   x
-			/* headers is string so we convert this to map */
-			console.log("<7>header iteration");
-			headers = headers.split(/\n|\r|\r\n/g).reduce(function(a, b) {
-			    if (b.length) {
-			      var [ key, value ] = b.split(': ');
-			      a[key] = value;
-			    }
-			    return a;
-			  }, {});
-			console.log(headers)		
-		});
-		
-			//console.log("<8>set Content-type");
-			//xhr.SetRequestHeader("Content-type", "text/html");
-			//console.log(headers);
+			
+			
+			insertExecute.addEventListener("click", ()=>{
+				console.log( $('#iaddress').val());
+				console.log( $('#idate').val());
+				console.log( $('#itime').val());
+				datetime = $('#idate').val()+$('#itime').val();
+				console.log("datetime | "+datetime);
+				
+				jsonData = {
+						"id" : userid,
+						"nm" : nm,
+						"brdt" : brdt,
+						"mbl_no" : mbl_no,
+						"nsp_rsvt_no" : nsp_rsvt_no,
+						"insp_addr" : $('#iaddress').val(),
+						"insp_dt" : datetime
+						};
+						
+				console.log("insertExecute");
+				$.ajax({ 
+					  url: 'insert', 
+					  type: 'POST', 
+					  data: JSON.stringify(jsonData), 
+					  headers: { 
+						  'Accept': 'application/json',
+					      'Content-Type': 'application/json'
+					  }, 
+					  success: function(response) { 
+						  console.log('success');
+					  }, 
+					  error: function(xhr, status, error) { 
+						  console.log('fail ' + status + ' , ' + error);
+					  } 
+					}); 
+				
+ 				
+				
+
+			}); 
+		});	
 			
 	}); //.ready	
 
@@ -184,8 +206,6 @@
 	<input id="userkey" name="userkey" placeholder="5bda87ad" size="4"> 
 	<button id="search"  class="btn btn-outline-secondary">검색</button> 
 	</div>
-	${user}
-	${data}
 	
 	<div id="container1">
 		<div id="msg1"> 회원정보가 없습니다 </div>
@@ -222,7 +242,9 @@
 	
 	
 	<div id="container2">
-		<div id="msg2"> 예약정보가 없습니다 </div>	
+		<div id="msg2"> 예약내역이 없습니다</div>
+		<button id="insert"  class="btn btn-outline-success">검사예약</button>  
+		
 		<div id="table2">
 		 ㅁ병역판정검사 예약정보
 		<table class="table table-light table-hover">
@@ -253,9 +275,44 @@
 		</table>
 		</div>	
 	</div>
+	
 	<div id="container3">
 		<button id="modify"  class="btn btn-outline-warning">예약변경</button> 
 		<button id="delete"  class="btn btn-outline-danger">예약삭제</button> 
+	</div>
+	
+	<div id="container4">	
+		<div id="table3">
+		 ㅁ검사희망 장소, 시간, 일정을 입력하세요
+		<table class="table table-light table-hover">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col"></th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th>1</th>
+		      <td>검사장소</td>
+		      <td>
+		      <input id="iaddress" name="iaddress" placeholder="ex.서울시 영등포구 여의대방로 43길 13" size="12" value="테스트장소"></td>
+		    </tr>
+		    <tr>
+		      <th>2</th>
+		      <td>검사일자</td>
+		      <td><input id="idate" name="idate" placeholder="ex.20231225" size="12" value="2023-12-11"></td>
+		    </tr>
+		    <tr>
+		      <th>3</th>
+		      <td>시간</td>
+		      <td><input id="itime" name="itime" placeholder="ex.13:30:00" size="12" value="13:23:30"></td>
+		    </tr>
+		  </tbody>
+		</table>
+			<button id="insertExecute"  class="btn btn-outline-warning">예약실행</button> 
+		</div>	
 	</div>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>

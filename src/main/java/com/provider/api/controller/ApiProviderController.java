@@ -1,5 +1,6 @@
 package com.provider.api.controller;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -49,18 +50,22 @@ public class ApiProviderController {
 		@GetMapping(value = "/search")
 		public ResponseEntity<?> getUserinfoById(@RequestParam String id) {
 			System.out.println("getUserinfoById | request: get | id "+ id);
-			ApiVO user = apiService.getUserinfoById(id);
-			
-			//System.out.println("user | " + user.toString());
-			//System.out.println("user | " + user.getInsp_addr()+user.getInsp_rsvt_no()+user.getInsp_dt());
+			ApiVO user;
+			user = apiService.getUserinfoById(id);
+			System.out.println("user "+user);
+			if(user == null) {
+				user = apiService.getOnlyUserinfoById(id);
+			}
+
+			//System.out.println("onlyuser "+apiService.getOnlyUserinfoById(id).toString());
 	
 			return new ResponseEntity(user, HttpStatus.OK);
 			
 		}
 
 		// 예약하기
-		@PostMapping(value = "/reservation")
-		public HashMap<String, Object> reservation(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody) {
+		@PostMapping(value = "/insert")
+		public HashMap<String, Object> reservation(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody) throws ParseException {
 			System.out.println("messageBody |" + messageBody);
 			apiService.reservation(messageBody);
 
