@@ -122,6 +122,7 @@ public class ApiProviderController {
 		// 예약정보삭제하기
 		@PostMapping(value = "/delete")
 		public  HashMap<String, Object> delete(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody) {
+			System.out.println("delete | request: post");
 			System.out.println("messageBody |" + messageBody);
 			apiService.delete(messageBody);
 			
