@@ -85,7 +85,7 @@
 		};
  
 	
-	 	function userSearch(userid){
+	 	function userSearch(userid){	 		
 	 		//초기화면세팅
 			$('#msg1').hide();
 			$('#msg2').hide();
@@ -95,7 +95,6 @@
 			$('#container3').hide();
 			$('#container4').hide();
 			$('#modifyExecute').hide();
-			
 			 $.get("/search", 
 						{ id : userid }, 
 						// 서버가 필요한 정보를 같이 보냄. 
@@ -242,62 +241,61 @@
 			
 			//기능3.예약정보수정
 			modifyExecute.addEventListener("click", ()=>{
-			console.log("you clicked modifyExecute");
-			insp_addr = $('#iaddress').val();
-			insp_dt =$('#idate').val()+" "+$('#itime').val();
+				console.log("you clicked modifyExecute");
+				console.log(userid);
+				insp_addr = $('#iaddress').val();
+				insp_dt =$('#idate').val()+" "+$('#itime').val();
+				console.log(insp_rsvt_no);
+				console.log(insp_addr);
+				console.log(insp_dt);
+				
+				$.ajax({ 
+					  url: 'modify', 
+					  type: 'POST', 
+					  data: JSON.stringify({ id : userid, insp_rsvt_no : insp_rsvt_no , insp_addr : insp_addr, insp_dt : insp_dt }), 
+					  headers: { 
+						  'Accept': 'application/json',
+					      'Content-Type': 'application/json'
+					  }, 
+					  success: function(response) { 
+						  console.log('success');
+						  alert("수정완료");
+						  userSearch(userid);		  
+					  }, 
+					  error: function(xhr, status, error) { 
+						  console.log('fail ' + status + ' , ' + error);
+						  alert("수정완료");
+						  userSearch(userid);
+					  } 
+					}); 				
+				  });	
+		});
+		
+		//기능4.예약정보삭제
+		deleteExecute.addEventListener("click", ()=>{
+			console.log("you clicked deleteExecute");
+			console.log(userid);
 			console.log(insp_rsvt_no);
-			console.log(insp_addr);
-			console.log(insp_dt);
+			
 			$.ajax({ 
-				  url: 'modify', 
+				  url: 'delete', 
 				  type: 'POST', 
-				  data: JSON.stringify({ insp_rsvt_no : insp_rsvt_no , insp_addr : insp_addr, insp_dt : insp_dt }), 
+				  data: JSON.stringify({id: userid, insp_rsvt_no : insp_rsvt_no}), 
 				  headers: { 
 					  'Accept': 'application/json',
 				      'Content-Type': 'application/json'
 				  }, 
 				  success: function(response) { 
 					  console.log('success');
-					  alert("수정완료");
-					  userSearch(userid);		  
+					  alert("삭제완료");
+					  userSearch(userid);  				  
 				  }, 
 				  error: function(xhr, status, error) { 
 					  console.log('fail ' + status + ' , ' + error);
-					  alert("수정완료");
+					  alert("삭제완료");
 					  userSearch(userid);
 				  } 
-				}); 				
-			  });	
-		});
-		//기능4.예약정보삭제
-		deleteExecute.addEventListener("click", ()=>{
-		console.log("you clicked deleteExecute");
-		console.log(userid);
-		console.log(insp_rsvt_no);
-		
-		$.ajax({ 
-			  url: 'delete', 
-			  type: 'POST', 
-			  data: JSON.stringify({id: userid, insp_rsvt_no : insp_rsvt_no}), 
-			  headers: { 
-				  'Accept': 'application/json',
-			      'Content-Type': 'application/json'
-			  }, 
-			  success: function(response) { 
-				  console.log('success');
-				  alert("삭제완료");
-				  userSearch(userid);  				  
-			  }, 
-			  error: function(xhr, status, error) { 
-				  console.log('fail ' + status + ' , ' + error);
-				  alert("삭제완료");
-				  userSearch(userid);
-			  } 
-			}); 
-			
-		
-		
-		
+				}); 
 		
 		});	
 	}); //.ready	
@@ -307,7 +305,7 @@
 <body>
 	<div id="title">
 		병역판정검사 예약 조회 <br> #회원번호를 입력하세요: <input id="userkey"
-			name="userkey" placeholder="5bda87ad" size="4">
+			name="userkey" size="4">
 		<button id="search" class="btn btn-outline-secondary">검색</button>
 	</div>
 
@@ -401,19 +399,19 @@
 						<th>1</th>
 						<td>검사장소</td>
 						<td><input id="iaddress" name="iaddress"
-							placeholder="ex.서울시 영등포구 여의대방로 43길 13" size="12" value="테스트장소"></td>
+							placeholder="ex.서울시 영등포구 여의대방로 43길 13" size="12"></td>
 					</tr>
 					<tr>
 						<th>2</th>
 						<td>검사일자</td>
-						<td><input id="idate" name="idate" placeholder="ex.20231225"
-							size="12" value="2023-12-11"></td>
+						<td><input id="idate" name="idate"
+							placeholder="ex.2023-12-25" size="12"></td>
 					</tr>
 					<tr>
 						<th>3</th>
 						<td>시간</td>
 						<td><input id="itime" name="itime" placeholder="ex.13:30:00"
-							size="12" value="13:23:30"></td>
+							size="12"></td>
 					</tr>
 				</tbody>
 			</table>

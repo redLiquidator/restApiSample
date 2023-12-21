@@ -44,6 +44,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE members.id = #{id}
  	</select> 
  	
+ 	<select id="getReservationInfo" parameterType="com.provider.api.model.ApiVO" resultType="com.provider.api.model.ApiVO">
+ 		SELECT 
+ 			insp_rsvt_no,
+ 			insp_addr,
+ 			insp_dt
+ 		FROM reservation
+		WHERE insp_rsvt_no = #{insp_rsvt_no}
+ 	</select> 
+	
  	<update id="updateExamNo" parameterType="com.provider.api.model.ApiVO">
  		UPDATE members 
  		SET insp_rsvt_no= #{insp_rsvt_no}

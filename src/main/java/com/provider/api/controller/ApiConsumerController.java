@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,35 +33,69 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.provider.api.model.ApiVO;
 import com.provider.api.service.ApiProviderService;
 
-//github token | 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
-//@Controller // @Controller + @ResponseBody
 @RestController
-public class ApiProviderController {
-	
+public class ApiConsumerController {
 	@Resource
 	private ApiProviderService apiService;
-	ApiVO user;
 
+	ApiVO user;
+	
+	@SuppressWarnings("deprecation")
+	private static HttpHeaders getHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "KakaoAK " + "695c206ec549d13455fd2e0b582ea69a");
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
+		return headers;
+	}
+
+	@GetMapping("/front")
+	public ModelAndView front() throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("front");
+
+		return mav;
+	}
 
 	// 회원 정보및 예약정보 조회
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@GetMapping(value = "/providerSearch")
-	public ResponseEntity<?> getUserinfoById(@RequestParam String id) throws JsonProcessingException {
-		System.out.println("getUserinfoById | request: get | id " + id);
-		
-		user = apiService.getUserinfoById(id);
+	@GetMapping(value = "/search")
+	public ResponseEntity<?> getUserinfoById(@RequestParam String id){
+		System.out.println("provider | getUserinfoById | request: get | id " + id);
+		RestTemplate template = new RestTemplate();
+
+		//RestAPI 준비및 요청 https://devtalk.kakao.com/t/400-bad-request/47373/8
+        Map<String, Object> readyReq = new HashMap<String, Object>();
+        //body
+        readyReq.put("cid", "TC0ONETIME");
+        readyReq.put("partner_order_id", "1001");
+        readyReq.put("partner_user_id", "test@koitt.com");
+        readyReq.put("item_name", "갤럭시S9");
+        readyReq.put("quantity", "1");
+        readyReq.put("total_amount", "1155000");
+        readyReq.put("tax_free_amount", "0");
+        readyReq.put("approval_url", "http://localhost:8082/approval.do");
+        readyReq.put("cancel_url", "http://localhost:8082/cancel.do");
+        readyReq.put("fail_url", "http://localhost:8082/fail.do");
+            
+        HttpEntity<Object> request = new HttpEntity<Object>(readyReq, getHeaders());
+        ResponseEntity<Map> response = template.exchange("http://localhost:8080/search", HttpMethod.GET, request, Map.class);
+        
+        Map readyResp = response.getBody();
+        System.out.println("readyResp | " + readyResp);
+        
+        //오류방지
+        user = apiService.getUserinfoById(id);
 		System.out.println("user " + user);
 		if (user == null) {
 			user = apiService.getOnlyUserinfoById(id);
 		}
 
 		return new ResponseEntity(user, HttpStatus.OK);
-
 	}
 
 	// 예약하기
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(value = "/ProviderInsert")
+	@PostMapping(value = "/insert")
 	public ResponseEntity<?> reservation(@RequestBody ApiVO messageBody)
 			throws ParseException, JsonProcessingException {
 		System.out.println("reservation | request: post");
@@ -93,7 +128,7 @@ public class ApiProviderController {
 
 	// 예약정보수정하기
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(value = "/ProviderModify")
+	@PostMapping(value = "/modify")
 	public ResponseEntity modify(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody)
 			throws JsonProcessingException {
 		System.out.println("modify | request: post");
@@ -126,7 +161,7 @@ public class ApiProviderController {
 
 	// 예약정보삭제하기
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(value = "/ProviderDelete")
+	@PostMapping(value = "/delete")
 	public ResponseEntity delete(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody) throws JsonProcessingException {
 		System.out.println("delete | request: post");
 		System.out.println("messageBody |" + messageBody);

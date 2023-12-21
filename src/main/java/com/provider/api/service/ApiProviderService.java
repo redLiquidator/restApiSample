@@ -50,8 +50,8 @@ public class ApiProviderService {
 	// 검사예약
 	public void reservation(ApiVO apiVO) throws ParseException {
 		apiVO.setInsp_rsvt_no(randomVal(6));
-		System.err.println("insp_dt |" + apiVO.getInsp_dt());
-		System.err.println("insp_addr|" + apiVO.getInsp_addr());
+		System.out.println("insp_dt |" + apiVO.getInsp_dt());
+		System.out.println("insp_addr|" + apiVO.getInsp_addr());
 
 		// 1.사용자테이블에 검사예약번호 업데이트
 		apiMapper.updateExamNo(apiVO);
@@ -71,5 +71,9 @@ public class ApiProviderService {
 		// 2.사용자테이블에 검사예약번호 null값으로
 		apiVO.setInsp_rsvt_no(null);
 		apiMapper.updateExamNo(apiVO);
+	}
+
+	public ApiVO getReservationInfo(String insp_rsvt_no) {
+		return apiMapper.getReservationInfo(insp_rsvt_no);
 	}
 }
