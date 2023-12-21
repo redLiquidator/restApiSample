@@ -66,6 +66,7 @@ public class ApiProviderController {
 		// 예약하기
 		@PostMapping(value = "/insert")
 		public HashMap<String, Object> reservation(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody) throws ParseException {
+			System.out.println("reservation | request: post");
 			System.out.println("messageBody |" + messageBody);
 			apiService.reservation(messageBody);
 
@@ -109,6 +110,7 @@ public class ApiProviderController {
 		// 예약정보수정하기
 		@PostMapping(value = "/modify")
 		public  HashMap<String, Object> modify(@RequestHeader Map<String, String> header, @RequestBody ApiVO messageBody) {
+			System.out.println("modify | request: post");
 			System.out.println("messageBody |" + messageBody);
 			apiService.modify(messageBody);
 			

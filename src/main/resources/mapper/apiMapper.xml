@@ -57,13 +57,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	
  	<update id="updateReservation" parameterType="com.provider.api.model.ApiVO">
  		UPDATE reservation 
- 		SET insp_addr="변경된주소", insp_dt="2023-12-30 10:30:00"
- 		WHERE insp_rsvt_no="100001"
+ 		SET insp_addr= #{insp_addr}, insp_dt= #{insp_dt}
+ 		WHERE insp_rsvt_no= #{insp_rsvt_no}
  	</update>
  	
  	<delete id="deleteReservation" parameterType="com.provider.api.model.ApiVO">
  		DELETE FROM reservation
- 		WHERE insp_rsvt_no="100001"
+ 		WHERE insp_rsvt_no= #{insp_rsvt_no}
  	</delete>
  	
 </mapper> 	

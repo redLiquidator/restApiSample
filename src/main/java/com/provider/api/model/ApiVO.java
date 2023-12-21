@@ -4,7 +4,6 @@ import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -16,5 +15,5 @@ public class ApiVO {
 	private String mbl_no;
 	private String insp_rsvt_no;
 	private String insp_addr;
-	private Date insp_dt;	
+	private String insp_dt;	
 }

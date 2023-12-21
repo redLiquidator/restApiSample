@@ -80,13 +80,6 @@
 		    <version>8.0.28</version>
 		</dependency>
 		
-		<dependency>
-		    <groupId>joda-time</groupId>
-		    <artifactId>joda-time</artifactId>
-		    <version>2.12.5</version>
-		</dependency>
-
-
 	</dependencies>
 
 	<build>

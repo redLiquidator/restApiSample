@@ -1,13 +1,8 @@
 package com.provider.api.service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Random;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,13 +59,11 @@ public class ApiProviderService {
 		//string을 date로 2023121110:30 -> ?	
 		 // 문자열       
 		//String dateStr = "20210619210507";  
-		String dateStr = apiVO.getInsp_dt();   
-		// 포맷터        
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");         
-		// 문자열 -> Date        
-		Date date = formatter.parse(dateStr);         
-		System.out.println(date); 
-		
+		/*
+		 * String dateStr = apiVO.getInsp_dt(); // 포맷터 SimpleDateFormat formatter = new
+		 * SimpleDateFormat("yyyyMMddHHmmss"); // 문자열 -> Date Date date =
+		 * formatter.parse(dateStr); System.out.println(date);
+		 */
 
 	    //2.사용자테이블에 검사예약번호 업데이트
 		apiMapper.updateExamNo(apiVO);

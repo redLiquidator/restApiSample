@@ -46,19 +46,19 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		let search = document.querySelector("#search");
-		let insert = document.querySelector("#insert");	
-		let insertExecute = document.querySelector("#insertExecute");	
-		let modify = document.querySelector("#modify");
-		let del = document.querySelector("#delete");
+		const search = document.querySelector("#search");
+		const insert = document.querySelector("#insert");	
+		const insertExecute = document.querySelector("#insertExecute");	
+		const modify = document.querySelector("#modify");
+		const modifyExecute = document.querySelector("#modifyExecute");
+		const del = document.querySelector("#delete");
 		let userid;
 		let nm;
 		let brdt;
 		let mbl_no;
-		let nsp_rsvt_no;
+		let insp_rsvt_no;
 		let insp_addr;
 		let insp_dt;
-		let datetime;
 		
 		//초기화면세팅
 		$('#msg1').hide();
@@ -68,13 +68,14 @@
 		$('#table2').hide();
 		$('#container3').hide();
 		$('#container4').hide();
+		$('#modifyExecute').hide();
 		
 	 	let jsonData = {
 				"id" : userid,
 				"nm" : nm,
 				"brdt" : brdt,
 				"mbl_no" : mbl_no,
-				"nsp_rsvt_no" : nsp_rsvt_no,
+				"insp_rsvt_no" : insp_rsvt_no,
 				"insp_addr" : insp_addr,
 				"insp_dt" : insp_dt		
 		};
@@ -100,7 +101,7 @@
 						nm = data.nm;
 						brdt = data.brdt;
 						mbl_no = data.mbl_no;
-						nsp_rsvt_no = data.nsp_rsvt_no;
+						insp_rsvt_no = data.insp_rsvt_no;
 						insp_addr = data.insp_addr;
 						insp_dt = data.insp_dt;
 						
@@ -108,6 +109,13 @@
 						if(data.id != null && data.insp_rsvt_no == null){
 							$('#insert').show();
 						}
+						
+						if(data.id != null && data.insp_rsvt_no != null){
+							//예약변경삭제 버튼 숨기기
+							$('#container2').show();
+							$('#container3').show();
+						}
+						
 						
 						//사용자정보가 있으면 회원정보테이블을 보여준다.
 						if(data.id != null){
@@ -143,9 +151,9 @@
 							$('#msg2').show();
 							$('#table2').hide();
 						}						
-					}); 
+			}); 
 		 
-			//기능2.예약정보등록
+			
 			insert.addEventListener("click", ()=>{
 				$('#container3').hide();
 				$('#container4').show();
@@ -153,23 +161,24 @@
 				$('#insert').hide();
 			});
 			
-			
-			
+			//기능2.예약정보등록
 			insertExecute.addEventListener("click", ()=>{
-				console.log( $('#iaddress').val());
-				console.log( $('#idate').val());
-				console.log( $('#itime').val());
-				datetime = $('#idate').val()+$('#itime').val();
-				console.log("datetime | "+datetime);
+	
+	
+				insp_addr = $('#iaddress').val()
+				insp_dt = $('#idate').val()+" "+$('#itime').val();
+				
+				console.log(insp_addr);
+				console.log(insp_dt);
 				
 				jsonData = {
 						"id" : userid,
 						"nm" : nm,
 						"brdt" : brdt,
 						"mbl_no" : mbl_no,
-						"nsp_rsvt_no" : nsp_rsvt_no,
-						"insp_addr" : $('#iaddress').val(),
-						"insp_dt" : datetime
+						"insp_rsvt_no" : insp_rsvt_no,
+						"insp_addr" : insp_addr,
+						"insp_dt" : insp_dt
 						};
 						
 				console.log("insertExecute");
@@ -189,12 +198,57 @@
 					  } 
 					}); 
 				
- 				
 				
-
-			}); 
-		});	
+			});
 			
+			modify.addEventListener("click", ()=>{
+				console.log("you clicked modify");
+
+				$('#container3').hide();
+				$('#container2').hide();
+				$('#container4').show();
+				$('#msg2').hide();
+				$('#insert').hide();
+				$('#insertExecute').hide();
+				$('#modifyExecute').show();
+					
+				//사용자 예약정보 테이블에 불러오기 			
+				console.log(insp_addr);
+				console.log(insp_dt);
+				$('#iaddress').val(insp_addr);
+				$('#idate').val(insp_dt.substring(0,10));
+				$('#itime').val(insp_dt.substring(11,19));				
+			});
+			
+			//기능3.예약정보수정
+			modifyExecute.addEventListener("click", ()=>{
+			console.log("you clicked modifyExecute");
+			insp_addr = $('#iaddress').val();
+			insp_dt =$('#idate').val()+" "+$('#itime').val();
+			console.log(insp_rsvt_no);
+			console.log(insp_addr);
+			console.log(insp_dt);
+			$.ajax({ 
+				  url: 'modify', 
+				  type: 'POST', 
+				  data: JSON.stringify({ insp_rsvt_no : insp_rsvt_no , insp_addr : insp_addr, insp_dt : insp_dt }), 
+				  headers: { 
+					  'Accept': 'application/json',
+				      'Content-Type': 'application/json'
+				  }, 
+				  success: function(response) { 
+					  console.log('success');
+				  }, 
+				  error: function(xhr, status, error) { 
+					  console.log('fail ' + status + ' , ' + error);
+				  } 
+				}); 
+			
+
+							
+			});
+			
+		});	
 	}); //.ready	
 
 </script>
@@ -312,6 +366,7 @@
 		  </tbody>
 		</table>
 			<button id="insertExecute"  class="btn btn-outline-warning">예약실행</button> 
+			<button id="modifyExecute"  class="btn btn-outline-warning">변경실행</button> 
 		</div>	
 	</div>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
