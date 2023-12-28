@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
 <!DOCTYPE html>
@@ -95,7 +96,8 @@
 			$('#container3').hide();
 			$('#container4').hide();
 			$('#modifyExecute').hide();
-			 $.get("/search", 
+			// $.get("/search", 
+			$.get("/consumerSearch", 
 						{ id : userid }, 
 						// 서버가 필요한 정보를 같이 보냄. 
 						function(data, status) { 

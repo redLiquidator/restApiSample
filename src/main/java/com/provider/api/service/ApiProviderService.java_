@@ -10,38 +10,13 @@ import com.provider.api.mapper.ApiMapper;
 import com.provider.api.model.ApiVO;
 
 @Service
-public class ApiProviderService {
+public class ApiProviderService_ {
 	@Autowired
 	private ApiMapper apiMapper;
 
-	/*
-	 * public String checksum(String message) { System.out.println("message " +
-	 * message); Chec	ksumModule checksumModule = new ChecksumModule(); String
-	 * checksumResult = checksumModule.checksum(message);
-	 * System.out.println("checksumResult " + checksumResult);
-	 * 
-	 * return checksumResult; }
-	 * 
-	 * public String encrypt(String data) { String strKey =
-	 * "b7Rz1cawP9ws1RJQARK5wbiqHOQnTLxErPQVQMKeBnY="; // String data =
-	 * "Temporary Message for Encrypt";
-	 * 
-	 * CryptoModule cryptoModule = new CryptoModule(); String encryptResult =
-	 * cryptoModule.encrypt(strKey, data); System.out.println("encryptResult " +
-	 * encryptResult);
-	 * 
-	 * return encryptResult; }
-	 * 
-	 * public String decrypt(String encryptResult) { String strKey =
-	 * "b7Rz1cawP9ws1RJQARK5wbiqHOQnTLxErPQVQMKeBnY=";
-	 * 
-	 * CryptoModule cryptoModule = new CryptoModule();
-	 * 
-	 * String decryptResult = cryptoModule.decrypt(strKey, encryptResult);
-	 * System.out.println("decryptResult " + decryptResult);
-	 * 
-	 * return decryptResult; }
-	 */
+	public ApiVO test() {
+		return apiMapper.test();
+	}
 
 	// 랜덤문자생성
 	public String randomVal(int length) {
@@ -69,7 +44,6 @@ public class ApiProviderService {
 
 	// only회원정보
 	public ApiVO getOnlyUserinfoById(String id) {
-		System.out.println("service");
 		return apiMapper.getOnlyUserinfoById(id);
 	}
 
